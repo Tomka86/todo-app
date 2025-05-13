@@ -1,0 +1,17 @@
+<h2 class="mt-4">Új teendő hozzáadása</h2>
+
+<form #todoForm="ngForm" (ngSubmit)="onSubmit(todoForm)" class="row g-3 mt-2">
+  <div class="col-md-6">
+    <input
+      type="text"
+      name="title"
+      [(ngModel)]="title"
+      class="form-control"
+      placeholder="Teendő címe"
+      required
+    />
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-success w-100">Hozzáadás</button>
+  </div>
+</form>

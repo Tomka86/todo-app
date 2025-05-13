@@ -1,0 +1,112 @@
+<h2 class="mt-4">Teendők</h2>
+
+<!-- 🔍 Keresőmező -->
+<div class="mb-3">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Keresés a teendők között..."
+    [(ngModel)]="searchTerm"
+  />
+</div>
+
+<!-- 📊 Rendezés és gombok -->
+<div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
+  <select class="form-select w-auto" [(ngModel)]="sortBy" title="Rendezés">
+    <option value="title">🔠 Cím szerint</option>
+    <option value="completed">✅ Elvégzettség szerint</option>
+  </select>
+
+  <button
+    class="btn btn-outline-secondary"
+    (click)="downloadTodos()"
+    [disabled]="filteredTodos.length === 0"
+  >
+    📥 Exportálás JSON-ként
+  </button>
+
+  <button
+    class="btn btn-outline-danger"
+    (click)="clearTodosByCategory()"
+    [disabled]="filteredTodos.length === 0"
+  >
+    🗑️ Összes törlése
+  </button>
+</div>
+
+<!-- 🔢 Statisztika blokk -->
+<div class="alert alert-info" *ngIf="filteredTodos.length > 0">
+  Összes: <strong>{{ filteredTodos.length }}</strong
+  >, Kész: <strong>{{ completedCount }}</strong
+  >, Hátralévő: <strong>{{ remainingCount }}</strong>
+</div>
+
+<ul class="list-group mt-2" *ngIf="filteredTodos.length > 0; else noTodos">
+  <li
+    class="list-group-item d-flex justify-content-between align-items-center"
+    *ngFor="let todo of filteredTodos"
+  >
+    <div class="d-flex align-items-center">
+      <input
+        class="form-check-input me-2"
+        type="checkbox"
+        [checked]="todo.completed"
+        (change)="toggleTodo(todo)"
+        id="todo-{{ todo.id }}"
+      />
+
+      <ng-container *ngIf="editedTodoId === todo.id; else readMode">
+        <input
+          class="form-control form-control-sm"
+          [(ngModel)]="todo.title"
+          (blur)="saveEditedTodo()"
+          (keydown.enter)="saveEditedTodo()"
+          autofocus
+        />
+      </ng-container>
+
+      <ng-template #readMode>
+        <label
+          class="form-check-label me-3"
+          [for]="'todo-' + todo.id"
+          [class.text-decoration-line-through]="todo.completed"
+        >
+          {{ todo.title }}
+        </label>
+      </ng-template>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+      <span
+        class="badge"
+        [ngClass]="getCategoryInfo(todo.categoryId).class"
+        title="Kategória"
+      >
+        {{ getCategoryInfo(todo.categoryId).icon }}
+        {{ getCategoryInfo(todo.categoryId).name }}
+      </span>
+
+      <span class="badge bg-secondary">#{{ todo.id }}</span>
+
+      <button
+        class="btn btn-sm btn-outline-secondary"
+        (click)="editTodo(todo.id)"
+        title="Szerkesztés"
+      >
+        ✏️
+      </button>
+
+      <button
+        class="btn btn-sm btn-danger"
+        (click)="deleteTodo(todo)"
+        title="Törlés"
+      >
+        🗑️
+      </button>
+    </div>
+  </li>
+</ul>
+
+<ng-template #noTodos>
+  <p class="text-muted mt-2">Nincs teendő ebben a kategóriában.</p>
+</ng-template>
