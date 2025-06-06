@@ -8,4 +8,6 @@ export interface Todo {
   title: string;
   completed: boolean;
   categoryId: number;
+  dueDate?: string;
 }
+

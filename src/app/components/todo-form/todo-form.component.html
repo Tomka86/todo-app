@@ -1,17 +1,47 @@
-<h2 class="mt-4">Új teendő hozzáadása</h2>
+<div class="card shadow-sm p-4 mb-4 bg-light rounded">
+  <h2 class="mb-3 text-primary fw-bold">➕ Új teendő hozzáadása</h2>
 
-<form #todoForm="ngForm" (ngSubmit)="onSubmit(todoForm)" class="row g-3 mt-2">
-  <div class="col-md-6">
-    <input
-      type="text"
-      name="title"
-      [(ngModel)]="title"
-      class="form-control"
-      placeholder="Teendő címe"
-      required
-    />
-  </div>
-  <div class="col-md-2">
-    <button type="submit" class="btn btn-success w-100">Hozzáadás</button>
-  </div>
-</form>
+  <form
+    #todoForm="ngForm"
+    (ngSubmit)="onSubmit(todoForm)"
+    class="row g-3 align-items-end"
+  >
+    <div class="col-md-5">
+      <label for="title" class="form-label">Teendő címe</label>
+      <input
+        id="title"
+        type="text"
+        name="title"
+        [(ngModel)]="title"
+        class="form-control form-control-lg rounded border-0 shadow-sm"
+        placeholder="Pl. Bevásárlás..."
+        required
+      />
+    </div>
+
+    <div class="col-md-3">
+      <label for="dueDate" class="form-label">Határidő</label>
+      <input
+        id="dueDate"
+        type="date"
+        name="dueDate"
+        [(ngModel)]="dueDate"
+        class="form-control form-control-lg rounded border-0 shadow-sm"
+      />
+    </div>
+
+    <div class="col-md-2">
+      <button
+        type="submit"
+        class="btn btn-success btn-lg w-100 rounded shadow-sm"
+      >
+        ➕ Hozzáadás
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
+
+

@@ -15,8 +15,9 @@ export class TodoFormComponent {
   @Output() todoCreated = new EventEmitter<Todo>();
 
   title: string = '';
+  dueDate: string = '';
 
-  onSubmit(form: NgForm) {
+  onSubmit(form: NgForm): void {
     if (form.invalid || this.selectedCategoryId === null) return;
 
     const newTodo: Todo = {
@@ -24,9 +25,14 @@ export class TodoFormComponent {
       title: this.title,
       completed: false,
       categoryId: this.selectedCategoryId,
+      dueDate: this.dueDate,
     };
 
     this.todoCreated.emit(newTodo);
     form.resetForm();
+    this.dueDate = '';
   }
 }
+
+
+

@@ -14,20 +14,32 @@ import { FormsModule } from '@angular/forms';
 export class TodoListComponent {
   @Input() todos: Todo[] = [];
   @Input() selectedCategoryId: number | null = null;
-  searchTerm: string = '';
+
+  searchTerm = '';
   sortBy: 'title' | 'completed' = 'title';
   editedTodoId: number | null = null;
+  filterStatus: 'all' | 'completed' | 'active' = 'all';
+
+  today = new Date();
 
   constructor(private storageService: StorageService) {}
 
   get filteredTodos(): Todo[] {
     if (this.selectedCategoryId === null) return [];
 
-    let filtered = this.todos
-      .filter((todo) => todo.categoryId === this.selectedCategoryId)
-      .filter((todo) =>
+    let filtered = this.todos.filter(todo => todo.categoryId === this.selectedCategoryId);
+
+    if (this.searchTerm.trim()) {
+      filtered = filtered.filter(todo =>
         todo.title.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
+    }
+
+    if (this.filterStatus === 'completed') {
+      filtered = filtered.filter(todo => todo.completed);
+    } else if (this.filterStatus === 'active') {
+      filtered = filtered.filter(todo => !todo.completed);
+    }
 
     if (this.sortBy === 'title') {
       filtered.sort((a, b) => a.title.localeCompare(b.title));
@@ -39,11 +51,11 @@ export class TodoListComponent {
   }
 
   get completedCount(): number {
-    return this.filteredTodos.filter((todo) => todo.completed).length;
+    return this.filteredTodos.filter(todo => todo.completed).length;
   }
 
   get remainingCount(): number {
-    return this.filteredTodos.filter((todo) => !todo.completed).length;
+    return this.filteredTodos.filter(todo => !todo.completed).length;
   }
 
   toggleTodo(todo: Todo): void {
@@ -52,7 +64,7 @@ export class TodoListComponent {
   }
 
   deleteTodo(todo: Todo): void {
-    const index = this.todos.findIndex((t) => t.id === todo.id);
+    const index = this.todos.findIndex(t => t.id === todo.id);
     if (index !== -1) {
       this.todos.splice(index, 1);
       this.storageService.saveTodos(this.todos);
@@ -74,9 +86,7 @@ export class TodoListComponent {
 
   clearTodosByCategory(): void {
     if (this.selectedCategoryId === null) return;
-    this.todos = this.todos.filter(
-      (todo) => todo.categoryId !== this.selectedCategoryId
-    );
+    this.todos = this.todos.filter(todo => todo.categoryId !== this.selectedCategoryId);
     this.storageService.saveTodos(this.todos);
   }
 
@@ -101,4 +111,15 @@ export class TodoListComponent {
         return { name: 'Ismeretlen', icon: '❓', class: 'bg-secondary' };
     }
   }
+
+  getDueDateClass(todo: Todo): string {
+    if (!todo.dueDate) return '';
+    const due = new Date(todo.dueDate);
+    return due < this.today ? 'text-danger' : 'text-muted';
+  }
 }
+
+
+
+
+

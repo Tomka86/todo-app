@@ -17,3 +17,4 @@ export class CategoryListComponent {
     this.categorySelected.emit(id);
   }
 }
+

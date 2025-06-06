@@ -1,16 +1,31 @@
-<h1>Teendőlista kategóriákkal</h1>
+<div class="container my-4">
+  <h1 class="text-center mb-4">📋 Teendőlista kategóriákkal</h1>
 
-<app-category-list
-  [categories]="categories"
-  (categorySelected)="onCategorySelected($event)"
->
-</app-category-list>
+  <div class="row mb-4">
+    <div class="col-12">
+      <app-category-list
+        [categories]="categories"
+        (categorySelected)="onCategorySelected($event)"
+      ></app-category-list>
+    </div>
+  </div>
 
-<app-todo-form
-  [selectedCategoryId]="selectedCategoryId"
-  (todoCreated)="onNewTodo($event)"
->
-</app-todo-form>
+  <div class="row mb-4">
+    <div class="col-12">
+      <app-todo-form
+        [selectedCategoryId]="selectedCategoryId"
+        (todoCreated)="onNewTodo($event)"
+      ></app-todo-form>
+    </div>
+  </div>
 
-<app-todo-list [todos]="todos" [selectedCategoryId]="selectedCategoryId">
-</app-todo-list>
+  <div class="row">
+    <div class="col-12">
+      <app-todo-list
+        [todos]="todos"
+        [selectedCategoryId]="selectedCategoryId"
+      ></app-todo-list>
+    </div>
+  </div>
+</div>
+
